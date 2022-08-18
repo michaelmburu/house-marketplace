@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Link, Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import { toast } from 'react-toastify'
+import OAuth from '../components/OAuth'
 
 const SignIn = () => {
 
@@ -19,6 +22,25 @@ const SignIn = () => {
             [e.target.id]: e.target.value,
         }))
     }
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+
+        try {
+            const auth = getAuth()
+
+            const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    
+            if(userCredential.user) {
+                navigate('/')
+            }
+            toast.success("Sign In Successful")
+        } catch(error) {
+            toast.error('Wrong User Credentials')
+        }
+      
+    }
+
   return (
     <>
         <div className="pageContainer">
@@ -28,7 +50,7 @@ const SignIn = () => {
                 </div>
             </header>
             <main>
-                <form>
+                <form onSubmit={onSubmit}>
                     <input type="text" className="emailInput" placeholder='Email' id='email' value={email} onChange={onChange} /> 
 
                     <div type="text" className="passwordInputDiv">
@@ -49,7 +71,7 @@ const SignIn = () => {
                  
                 </form>
 
-                {/* GOOGLE OAUTH */}
+                <OAuth />
                 <Link to='/signup' className='registerLink'>
                     Sign Up Instead
                 </Link>

@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
-import { Link, Navigate, NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import {getAuth, createUserWithEmailAndPassword, updateProfile} from 'firebase/auth'
+import {setDoc, doc, serverTimestamp} from 'firebase/firestore'
+import { db } from '../firebase.config'
 import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import { toast } from 'react-toastify'
+import OAuth from '../components/OAuth'
 
 const SignUp = () => {
 
@@ -19,6 +24,32 @@ const SignUp = () => {
             [e.target.id]: e.target.value,
         }))
     }
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+
+        try {
+            const auth = getAuth()
+
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+
+            const user = userCredential.user
+
+            updateProfile(auth.currentUser, {
+                displayName: name
+            })
+
+            const formDataCopy = {...formData}
+            delete formDataCopy.password
+            formDataCopy.timestamp = serverTimestamp()
+
+            await setDoc(doc(db, 'users', user.uid), formDataCopy)
+
+            navigate('/')
+        } catch (error) {
+            toast.error("Something went wrong during registration")
+        }
+    }
   return (
     <>
         <div className="pageContainer">
@@ -28,7 +59,7 @@ const SignUp = () => {
                 </div>
             </header>
             <main>
-                <form>
+                <form onSubmit={onSubmit}>
                     <input type="text" className="nameInput" placeholder='Name' id='name' value={name} onChange={onChange} /> 
 
                     <input type="text" className="emailInput" placeholder='Email' id='email' value={email} onChange={onChange} /> 
@@ -51,7 +82,7 @@ const SignUp = () => {
                  
                 </form>
 
-                {/* GOOGLE OAUTH */}
+                <OAuth />
                 <Link to='/signin' className='registerLink'>
                     Sign In Instead
                 </Link>

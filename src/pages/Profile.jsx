@@ -1,8 +1,9 @@
 import React from 'react'
+import SignIn from './SignIn'
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <SignIn />
   )
 }
 

@@ -9,6 +9,7 @@ import Spinner from '../components/Spinner'
 import { v4 as uuidv4 } from 'uuid'
 
 const EditListing = () => {
+    // eslint-disable-next-line no-unused-vars
     const [geoLocationEnabled, setGeoLocationEnabled] = useState(false)
     const[loading, setLoading] = useState(false)
     const [listing, setListing] = useState(null)
@@ -40,6 +41,7 @@ const EditListing = () => {
         toast.error("You can't edit that listing")
         navigate('/')
       }
+       //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

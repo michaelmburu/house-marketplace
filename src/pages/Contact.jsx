@@ -7,6 +7,7 @@ const Contact = () => {
 
     const [message, setMessage] = useState('')
     const [landlord, setLandlord] = useState(null)
+    // eslint-disable-next-line no-unused-vars
     const [searchParams, setSearchParams] = useSearchParams()
 
     const params = useParams()
@@ -26,7 +27,9 @@ const Contact = () => {
         getLandlord()
     }, [params.landlordId])
 
-    const onChange = e => setMessage(e.target.value)
+    const onChange = e => {
+        setMessage(e.target.value)
+    }
 
     return (
       <div className=''pageContainer>

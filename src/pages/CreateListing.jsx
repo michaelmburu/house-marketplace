@@ -9,6 +9,7 @@ import Spinner from '../components/Spinner'
 import { v4 as uuidv4 } from 'uuid'
 
 const CreateListing = () => {
+    // eslint-disable-next-line no-unused-vars
     const [geoLocationEnabled, setGeoLocationEnabled] = useState(false)
     const[loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
